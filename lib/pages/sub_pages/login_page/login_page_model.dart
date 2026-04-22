@@ -1,0 +1,75 @@
+import '/backend/backend.dart';
+import '/components/main_logo/main_logo_widget.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
+import 'login_page_widget.dart' show LoginPageWidget;
+import 'package:flutter/material.dart';
+
+class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
+  ///  State fields for stateful widgets in this page.
+
+  // Model for mainLogo component.
+  late MainLogoModel mainLogoModel;
+  // State field(s) for TabBar widget.
+  TabController? tabBarController;
+  int get tabBarCurrentIndex =>
+      tabBarController != null ? tabBarController!.index : 0;
+  int get tabBarPreviousIndex =>
+      tabBarController != null ? tabBarController!.previousIndex : 0;
+
+  // State field(s) for emailAddress widget.
+  FocusNode? emailAddressFocusNode;
+  TextEditingController? emailAddressTextController;
+  String? Function(BuildContext, String?)? emailAddressTextControllerValidator;
+  // State field(s) for password widget.
+  FocusNode? passwordFocusNode;
+  TextEditingController? passwordTextController;
+  late bool passwordVisibility;
+  String? Function(BuildContext, String?)? passwordTextControllerValidator;
+  // Stores action output result for [Backend Call - Read Document] action in Button widget.
+  UsersRecord? dataUser;
+  // State field(s) for emailAddressCreate widget.
+  FocusNode? emailAddressCreateFocusNode;
+  TextEditingController? emailAddressCreateTextController;
+  String? Function(BuildContext, String?)?
+      emailAddressCreateTextControllerValidator;
+  // State field(s) for passwordCreate widget.
+  FocusNode? passwordCreateFocusNode;
+  TextEditingController? passwordCreateTextController;
+  late bool passwordCreateVisibility;
+  String? Function(BuildContext, String?)?
+      passwordCreateTextControllerValidator;
+  // State field(s) for role widget.
+  FocusNode? roleFocusNode;
+  TextEditingController? roleTextController;
+  late bool roleVisibility;
+  String? Function(BuildContext, String?)? roleTextControllerValidator;
+
+  @override
+  void initState(BuildContext context) {
+    mainLogoModel = createModel(context, () => MainLogoModel());
+    passwordVisibility = false;
+    passwordCreateVisibility = false;
+    roleVisibility = false;
+  }
+
+  @override
+  void dispose() {
+    mainLogoModel.dispose();
+    tabBarController?.dispose();
+    emailAddressFocusNode?.dispose();
+    emailAddressTextController?.dispose();
+
+    passwordFocusNode?.dispose();
+    passwordTextController?.dispose();
+
+    emailAddressCreateFocusNode?.dispose();
+    emailAddressCreateTextController?.dispose();
+
+    passwordCreateFocusNode?.dispose();
+    passwordCreateTextController?.dispose();
+
+    roleFocusNode?.dispose();
+    roleTextController?.dispose();
+  }
+}
