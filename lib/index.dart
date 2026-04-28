@@ -38,3 +38,8 @@ export '/pages/sub_pages/admin/create_cat/create_cat_widget.dart'
     show CreateCatWidget;
 export '/pages/sub_pages/admin/testpage/testpage_widget.dart'
     show TestpageWidget;
+export '/pages/sub_pages/admin/transaction/transaction_widget.dart'
+    show TransactionWidget;
+export '/l_cadmin/l_cadmin_widget.dart' show LCadminWidget;
+export '/chat_user/chat_user_widget.dart' show ChatUserWidget;
+export '/l_cadmin_chat/l_cadmin_chat_widget.dart' show LCadminChatWidget;

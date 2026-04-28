@@ -295,8 +295,7 @@ class _FullCartViewWidgetState extends State<FullCartViewWidget>
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                     child: Visibility(
-                                      visible:
-                                          FFAppState().cartItems.length >= 1,
+                                      visible: FFAppState().mycart.length >= 1,
                                       child: Padding(
                                         padding: EdgeInsets.all(16.0),
                                         child: SingleChildScrollView(
@@ -332,8 +331,8 @@ class _FullCartViewWidgetState extends State<FullCartViewWidget>
                                                     onPressed: () async {
                                                       FFAppState()
                                                           .cartPriceSummary = [];
-                                                      FFAppState().cartItems =
-                                                          [];
+                                                      FFAppState().mycart = [];
+                                                      FFAppState().cart = [];
                                                       safeSetState(() {});
                                                     },
                                                     text: 'Clear Cart',
@@ -407,15 +406,13 @@ class _FullCartViewWidgetState extends State<FullCartViewWidget>
                                                           ),
                                                 ),
                                               ),
-                                              if (FFAppState()
-                                                      .cartItems
-                                                      .length >=
+                                              if (FFAppState().mycart.length >=
                                                   1)
                                                 Builder(
                                                   builder: (context) {
                                                     final myCartNew11 =
                                                         FFAppState()
-                                                            .cartitem
+                                                            .mycart
                                                             .toList();
                                                     if (myCartNew11.isEmpty) {
                                                       return Center(
@@ -529,165 +526,176 @@ class _FullCartViewWidgetState extends State<FullCartViewWidget>
                                                                           4.0,
                                                                           0.0,
                                                                           12.0),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                0.0,
-                                                                                1.0,
-                                                                                1.0,
-                                                                                1.0),
-                                                                            child:
-                                                                                ClipRRect(
-                                                                              borderRadius: BorderRadius.circular(12.0),
-                                                                              child: CachedNetworkImage(
-                                                                                fadeInDuration: Duration(milliseconds: 500),
-                                                                                fadeOutDuration: Duration(milliseconds: 500),
-                                                                                imageUrl: columnProductsRecord.photoUrl,
-                                                                                width: 70.0,
-                                                                                height: 70.0,
-                                                                                fit: BoxFit.cover,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                3,
-                                                                            child:
-                                                                                Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 4.0, 0.0),
-                                                                              child: Column(
-                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                children: [
-                                                                                  Text(
-                                                                                    columnProductsRecord.name,
-                                                                                    style: FlutterFlowTheme.of(context).titleLarge.override(
-                                                                                          fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
-                                                                                          letterSpacing: 0.0,
-                                                                                          useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
-                                                                                        ),
+                                                                      child: StreamBuilder<
+                                                                          ProductsRecord>(
+                                                                        stream:
+                                                                            ProductsRecord.getDocument(myCartNew11Item.itemRef!),
+                                                                        builder:
+                                                                            (context,
+                                                                                snapshot) {
+                                                                          // Customize what your widget looks like when it's loading.
+                                                                          if (!snapshot
+                                                                              .hasData) {
+                                                                            return Center(
+                                                                              child: SizedBox(
+                                                                                width: 50.0,
+                                                                                height: 50.0,
+                                                                                child: CircularProgressIndicator(
+                                                                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                                                                    FlutterFlowTheme.of(context).primary,
                                                                                   ),
-                                                                                  Padding(
-                                                                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 8.0, 0.0),
-                                                                                    child: AutoSizeText(
-                                                                                      columnProductsRecord.description.maybeHandleOverflow(
-                                                                                        maxChars: 70,
-                                                                                        replacement: '…',
+                                                                                ),
+                                                                              ),
+                                                                            );
+                                                                          }
+
+                                                                          final rowProductsRecord =
+                                                                              snapshot.data!;
+
+                                                                          return Row(
+                                                                            mainAxisSize:
+                                                                                MainAxisSize.max,
+                                                                            children: [
+                                                                              Padding(
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 1.0, 1.0, 1.0),
+                                                                                child: ClipRRect(
+                                                                                  borderRadius: BorderRadius.circular(12.0),
+                                                                                  child: CachedNetworkImage(
+                                                                                    fadeInDuration: Duration(milliseconds: 500),
+                                                                                    fadeOutDuration: Duration(milliseconds: 500),
+                                                                                    imageUrl: columnProductsRecord.photoUrl,
+                                                                                    width: 70.0,
+                                                                                    height: 70.0,
+                                                                                    fit: BoxFit.cover,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Expanded(
+                                                                                flex: 3,
+                                                                                child: Padding(
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 4.0, 0.0),
+                                                                                  child: Column(
+                                                                                    mainAxisSize: MainAxisSize.max,
+                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        columnProductsRecord.name,
+                                                                                        style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                                                              fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                                                              letterSpacing: 0.0,
+                                                                                              useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                                                                                            ),
                                                                                       ),
+                                                                                      Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 8.0, 0.0),
+                                                                                        child: AutoSizeText(
+                                                                                          columnProductsRecord.description.maybeHandleOverflow(
+                                                                                            maxChars: 70,
+                                                                                            replacement: '…',
+                                                                                          ),
+                                                                                          textAlign: TextAlign.start,
+                                                                                          maxLines: 2,
+                                                                                          style: FlutterFlowTheme.of(context).labelMedium.override(
+                                                                                                fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
+                                                                                                letterSpacing: 0.0,
+                                                                                                useGoogleFonts: !FlutterFlowTheme.of(context).labelMediumIsCustom,
+                                                                                              ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Expanded(
+                                                                                flex: 2,
+                                                                                child: Column(
+                                                                                  mainAxisSize: MainAxisSize.max,
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      myCartNew11Item.quanity.toString(),
                                                                                       textAlign: TextAlign.start,
-                                                                                      maxLines: 2,
-                                                                                      style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                            fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
+                                                                                      style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                                                            fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                                                                                             letterSpacing: 0.0,
-                                                                                            useGoogleFonts: !FlutterFlowTheme.of(context).labelMediumIsCustom,
+                                                                                            useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                                                                           ),
                                                                                     ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                2,
-                                                                            child:
-                                                                                Column(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: [
-                                                                                Text(
-                                                                                  myCartNew11Item.quanity.toString(),
-                                                                                  textAlign: TextAlign.start,
-                                                                                  style: FlutterFlowTheme.of(context).titleLarge.override(
-                                                                                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
-                                                                                        letterSpacing: 0.0,
-                                                                                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                                                                                    Padding(
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 8.0, 0.0),
+                                                                                      child: AutoSizeText(
+                                                                                        'Quanity',
+                                                                                        textAlign: TextAlign.start,
+                                                                                        maxLines: 2,
+                                                                                        style: FlutterFlowTheme.of(context).labelMedium.override(
+                                                                                              fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
+                                                                                              letterSpacing: 0.0,
+                                                                                              useGoogleFonts: !FlutterFlowTheme.of(context).labelMediumIsCustom,
+                                                                                            ),
                                                                                       ),
-                                                                                ),
-                                                                                Padding(
-                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 8.0, 0.0),
-                                                                                  child: AutoSizeText(
-                                                                                    'Quanity',
-                                                                                    textAlign: TextAlign.start,
-                                                                                    maxLines: 2,
-                                                                                    style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                          fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
-                                                                                          letterSpacing: 0.0,
-                                                                                          useGoogleFonts: !FlutterFlowTheme.of(context).labelMediumIsCustom,
-                                                                                        ),
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                2,
-                                                                            child:
-                                                                                Column(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                                                              children: [
-                                                                                Padding(
-                                                                                  padding: EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
-                                                                                  child: Text(
-                                                                                    formatNumber(
-                                                                                      myCartNew11Item.totalPrice,
-                                                                                      formatType: FormatType.decimal,
-                                                                                      decimalType: DecimalType.automatic,
-                                                                                      currency: '\$',
                                                                                     ),
-                                                                                    textAlign: TextAlign.end,
-                                                                                    style: FlutterFlowTheme.of(context).titleLarge.override(
-                                                                                          fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
-                                                                                          letterSpacing: 0.0,
-                                                                                          useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
-                                                                                        ),
-                                                                                  ),
+                                                                                  ],
                                                                                 ),
-                                                                                Padding(
-                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
-                                                                                  child: RichText(
-                                                                                    textScaler: MediaQuery.of(context).textScaler,
-                                                                                    text: TextSpan(
-                                                                                      children: [
-                                                                                        TextSpan(
-                                                                                          text: 'Item Price (',
-                                                                                          style: TextStyle(),
-                                                                                        ),
-                                                                                        TextSpan(
-                                                                                          text: formatNumber(
-                                                                                            columnProductsRecord.price,
-                                                                                            formatType: FormatType.decimal,
-                                                                                            decimalType: DecimalType.automatic,
-                                                                                            currency: '\$',
-                                                                                          ),
-                                                                                          style: TextStyle(),
-                                                                                        ),
-                                                                                        TextSpan(
-                                                                                          text: ')',
-                                                                                          style: TextStyle(),
-                                                                                        )
-                                                                                      ],
-                                                                                      style: FlutterFlowTheme.of(context).bodySmall.override(
-                                                                                            fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
-                                                                                            color: FlutterFlowTheme.of(context).primary,
-                                                                                            letterSpacing: 0.0,
-                                                                                            fontWeight: FontWeight.w500,
-                                                                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
-                                                                                          ),
+                                                                              ),
+                                                                              Expanded(
+                                                                                flex: 2,
+                                                                                child: Column(
+                                                                                  mainAxisSize: MainAxisSize.max,
+                                                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
+                                                                                      child: Text(
+                                                                                        functions.hitungHargaBaris(columnProductsRecord.price.toDouble(), myCartNew11Item.quanity).toString(),
+                                                                                        textAlign: TextAlign.end,
+                                                                                        style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                                                              fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                                                              letterSpacing: 0.0,
+                                                                                              useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                                                                                            ),
+                                                                                      ),
                                                                                     ),
-                                                                                  ),
+                                                                                    Padding(
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                      child: RichText(
+                                                                                        textScaler: MediaQuery.of(context).textScaler,
+                                                                                        text: TextSpan(
+                                                                                          children: [
+                                                                                            TextSpan(
+                                                                                              text: 'Item Price (',
+                                                                                              style: TextStyle(),
+                                                                                            ),
+                                                                                            TextSpan(
+                                                                                              text: formatNumber(
+                                                                                                columnProductsRecord.price,
+                                                                                                formatType: FormatType.decimal,
+                                                                                                decimalType: DecimalType.automatic,
+                                                                                                currency: '\$',
+                                                                                              ),
+                                                                                              style: TextStyle(),
+                                                                                            ),
+                                                                                            TextSpan(
+                                                                                              text: ')',
+                                                                                              style: TextStyle(),
+                                                                                            )
+                                                                                          ],
+                                                                                          style: FlutterFlowTheme.of(context).bodySmall.override(
+                                                                                                fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
+                                                                                                color: FlutterFlowTheme.of(context).primary,
+                                                                                                letterSpacing: 0.0,
+                                                                                                fontWeight: FontWeight.w500,
+                                                                                                useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                                                                                              ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
                                                                                 ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ],
+                                                                              ),
+                                                                            ],
+                                                                          );
+                                                                        },
                                                                       ),
                                                                     ),
                                                                     Align(
@@ -757,10 +765,8 @@ class _FullCartViewWidgetState extends State<FullCartViewWidget>
                                                     );
                                                   },
                                                 ),
-                                              if (FFAppState()
-                                                      .cartItems
-                                                      .length >=
-                                                  1)
+                                              if (FFAppState().mycart.length >
+                                                  0)
                                                 Align(
                                                   alignment:
                                                       AlignmentDirectional(

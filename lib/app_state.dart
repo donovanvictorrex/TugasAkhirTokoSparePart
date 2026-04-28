@@ -32,36 +32,6 @@ class FFAppState extends ChangeNotifier {
           _cartPriceSummary;
     });
     _safeInit(() {
-      _cartItems = prefs
-              .getStringList('ff_cartItems')
-              ?.map((x) {
-                try {
-                  return CartItemStruct.fromSerializableMap(jsonDecode(x));
-                } catch (e) {
-                  print("Can't decode persisted data type. Error: $e.");
-                  return null;
-                }
-              })
-              .withoutNulls
-              .toList() ??
-          _cartItems;
-    });
-    _safeInit(() {
-      _cartitem = prefs
-              .getStringList('ff_cartitem')
-              ?.map((x) {
-                try {
-                  return CartItemStruct.fromSerializableMap(jsonDecode(x));
-                } catch (e) {
-                  print("Can't decode persisted data type. Error: $e.");
-                  return null;
-                }
-              })
-              .withoutNulls
-              .toList() ??
-          _cartitem;
-    });
-    _safeInit(() {
       _shippingOptions = prefs
               .getStringList('ff_shippingOptions')
               ?.map((x) {
@@ -160,88 +130,6 @@ class FFAppState extends ChangeNotifier {
     cartPriceSummary.insert(index, value);
     prefs.setStringList('ff_cartPriceSummary',
         _cartPriceSummary.map((x) => x.toString()).toList());
-  }
-
-  List<CartItemStruct> _cartItems = [];
-  List<CartItemStruct> get cartItems => _cartItems;
-  set cartItems(List<CartItemStruct> value) {
-    _cartItems = value;
-    prefs.setStringList(
-        'ff_cartItems', value.map((x) => x.serialize()).toList());
-  }
-
-  void addToCartItems(CartItemStruct value) {
-    cartItems.add(value);
-    prefs.setStringList(
-        'ff_cartItems', _cartItems.map((x) => x.serialize()).toList());
-  }
-
-  void removeFromCartItems(CartItemStruct value) {
-    cartItems.remove(value);
-    prefs.setStringList(
-        'ff_cartItems', _cartItems.map((x) => x.serialize()).toList());
-  }
-
-  void removeAtIndexFromCartItems(int index) {
-    cartItems.removeAt(index);
-    prefs.setStringList(
-        'ff_cartItems', _cartItems.map((x) => x.serialize()).toList());
-  }
-
-  void updateCartItemsAtIndex(
-    int index,
-    CartItemStruct Function(CartItemStruct) updateFn,
-  ) {
-    cartItems[index] = updateFn(_cartItems[index]);
-    prefs.setStringList(
-        'ff_cartItems', _cartItems.map((x) => x.serialize()).toList());
-  }
-
-  void insertAtIndexInCartItems(int index, CartItemStruct value) {
-    cartItems.insert(index, value);
-    prefs.setStringList(
-        'ff_cartItems', _cartItems.map((x) => x.serialize()).toList());
-  }
-
-  List<CartItemStruct> _cartitem = [];
-  List<CartItemStruct> get cartitem => _cartitem;
-  set cartitem(List<CartItemStruct> value) {
-    _cartitem = value;
-    prefs.setStringList(
-        'ff_cartitem', value.map((x) => x.serialize()).toList());
-  }
-
-  void addToCartitem(CartItemStruct value) {
-    cartitem.add(value);
-    prefs.setStringList(
-        'ff_cartitem', _cartitem.map((x) => x.serialize()).toList());
-  }
-
-  void removeFromCartitem(CartItemStruct value) {
-    cartitem.remove(value);
-    prefs.setStringList(
-        'ff_cartitem', _cartitem.map((x) => x.serialize()).toList());
-  }
-
-  void removeAtIndexFromCartitem(int index) {
-    cartitem.removeAt(index);
-    prefs.setStringList(
-        'ff_cartitem', _cartitem.map((x) => x.serialize()).toList());
-  }
-
-  void updateCartitemAtIndex(
-    int index,
-    CartItemStruct Function(CartItemStruct) updateFn,
-  ) {
-    cartitem[index] = updateFn(_cartitem[index]);
-    prefs.setStringList(
-        'ff_cartitem', _cartitem.map((x) => x.serialize()).toList());
-  }
-
-  void insertAtIndexInCartitem(int index, CartItemStruct value) {
-    cartitem.insert(index, value);
-    prefs.setStringList(
-        'ff_cartitem', _cartitem.map((x) => x.serialize()).toList());
   }
 
   List<ShippingOptionsStruct> _shippingOptions = [

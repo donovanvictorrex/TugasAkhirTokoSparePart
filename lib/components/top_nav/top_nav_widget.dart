@@ -132,6 +132,67 @@ class _TopNavWidgetState extends State<TopNavWidget>
                               ),
                             ),
                           ),
+                          FFButtonWidget(
+                            onPressed: () async {
+                              var chatsRecordReference =
+                                  ChatsRecord.collection.doc();
+                              await chatsRecordReference.set({
+                                ...createChatsRecordData(
+                                  lastMessageTime: getCurrentTimestamp,
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'users': [currentUserReference],
+                                  },
+                                ),
+                              });
+                              _model.chatBaru =
+                                  ChatsRecord.getDocumentFromData({
+                                ...createChatsRecordData(
+                                  lastMessageTime: getCurrentTimestamp,
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'users': [currentUserReference],
+                                  },
+                                ),
+                              }, chatsRecordReference);
+
+                              context.pushNamed(
+                                ChatUserWidget.routeName,
+                                queryParameters: {
+                                  'chatref': serializeParam(
+                                    _model.chatBaru?.reference,
+                                    ParamType.DocumentReference,
+                                  ),
+                                }.withoutNulls,
+                              );
+
+                              safeSetState(() {});
+                            },
+                            text: 'hubungi admin',
+                            options: FFButtonOptions(
+                              height: 40.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 0.0, 16.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: FlutterFlowTheme.of(context).primary,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .titleSmall
+                                  .override(
+                                    fontFamily: FlutterFlowTheme.of(context)
+                                        .titleSmallFamily,
+                                    color: Colors.white,
+                                    letterSpacing: 0.0,
+                                    useGoogleFonts:
+                                        !FlutterFlowTheme.of(context)
+                                            .titleSmallIsCustom,
+                                  ),
+                              elevation: 0.0,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -673,7 +734,7 @@ class _TopNavWidgetState extends State<TopNavWidget>
                   child: badges.Badge(
                     badgeContent: Text(
                       valueOrDefault<String>(
-                        FFAppState().cartItems.length.toString(),
+                        FFAppState().mycart.length.toString(),
                         '0',
                       ),
                       style: FlutterFlowTheme.of(context).titleSmall.override(

@@ -1429,7 +1429,6 @@ class _MainHomePageWidgetState extends State<MainHomePageWidget>
                                                                               () async {
                                                                             FFAppState().addToCart(largeDesktopProductsRecord.reference);
                                                                             FFAppState().addToCartPriceSummary(largeDesktopProductsRecord.price.toDouble());
-                                                                            FFAppState().addToCartItems(CartItemStruct());
                                                                             safeSetState(() {});
                                                                             ScaffoldMessenger.of(context).showSnackBar(
                                                                               SnackBar(
@@ -2055,8 +2054,23 @@ class _MainHomePageWidgetState extends State<MainHomePageWidget>
                                                                               () async {
                                                                             FFAppState().addToCart(listViewProductsRecord.reference);
                                                                             FFAppState().addToCartPriceSummary(listViewProductsRecord.price.toDouble());
-                                                                            FFAppState().addToCartItems(CartItemStruct());
                                                                             safeSetState(() {});
+                                                                            if (functions.getCartItemIndex(FFAppState().mycart.toList(), listViewProductsRecord.reference).toString() ==
+                                                                                '-1') {
+                                                                              FFAppState().addToMycart(CartItemStruct(
+                                                                                itemRef: listViewProductsRecord.reference,
+                                                                                quanity: 1,
+                                                                                totalPrice: listViewProductsRecord.price.toDouble(),
+                                                                              ));
+                                                                              safeSetState(() {});
+                                                                            } else {
+                                                                              FFAppState().updateMycartAtIndex(
+                                                                                functions.getCartItemIndex(FFAppState().mycart.toList(), listViewProductsRecord.reference)!,
+                                                                                (e) => e..incrementQuanity(1),
+                                                                              );
+                                                                              safeSetState(() {});
+                                                                            }
+
                                                                             ScaffoldMessenger.of(context).showSnackBar(
                                                                               SnackBar(
                                                                                 content: Text(
