@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -7,9 +8,13 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/upload_data.dart';
+import 'dart:ui';
 import '/index.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'create_product_model.dart';
 export 'create_product_model.dart';
 
@@ -301,23 +306,13 @@ class _CreateProductWidgetState extends State<CreateProductWidget> {
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
-                                              child: _model.uploadedLocalFile_uploadImageprodUsy.bytes != null && _model.uploadedLocalFile_uploadImageprodUsy.bytes!.isNotEmpty
-                                                  ? Image.memory(
-                                                      _model.uploadedLocalFile_uploadImageprodUsy.bytes!,
-                                                      width: 200.0,
-                                                      height: 200.0,
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : Container(
-                                                      width: 200.0,
-                                                      height: 200.0,
-                                                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                      child: Icon(
-                                                        Icons.add_a_photo,
-                                                        color: FlutterFlowTheme.of(context).secondaryText,
-                                                        size: 40.0,
-                                                      ),
-                                                    ),
+                                              child: Image.network(
+                                                _model
+                                                    .uploadedFileUrl_uploadImageprodUsy,
+                                                width: 200.0,
+                                                height: 200.0,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ),
                                         ),
