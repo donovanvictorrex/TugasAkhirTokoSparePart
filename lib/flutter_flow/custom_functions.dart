@@ -27,3 +27,24 @@ int? getCartItemIndex(
 ) {
   return cartList!.indexWhere((e) => e.itemRef == targetRef);
 }
+
+double? hitungHargaBaris(
+  double? harga,
+  int? jumlah,
+) {
+  if (harga == null || jumlah == null) {
+    return 0.0;
+  }
+
+  return harga * jumlah;
+}
+
+int? tambahJumlahBarang(
+  int? jumlahLama,
+  int? jumlahBaru,
+) {
+  int lama = jumlahLama ?? 0;
+  int baru = jumlahBaru ?? 0;
+
+  return lama + baru;
+}

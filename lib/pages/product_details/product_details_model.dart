@@ -1,4 +1,3 @@
-import '/backend/backend.dart';
 import '/components/gradient_button/gradient_button_widget.dart';
 import '/components/top_nav/top_nav_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -6,7 +5,6 @@ import '/flutter_flow/form_field_controller.dart';
 import '/index.dart';
 import 'product_details_widget.dart' show ProductDetailsWidget;
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ProductDetailsModel extends FlutterFlowModel<ProductDetailsWidget> {
   ///  State fields for stateful widgets in this page.
@@ -41,12 +39,6 @@ class ProductDetailsModel extends FlutterFlowModel<ProductDetailsWidget> {
       choiceChipsValueController4?.value = val != null ? [val] : [];
   // State field(s) for RatingBar widget.
   double? ratingBarValue;
-  // State field(s) for ListView widget.
-
-  PagingController<DocumentSnapshot?, ReviewsRecord>? listViewPagingController;
-  Query? listViewPagingQuery;
-  List<StreamSubscription?> listViewStreamSubscriptions = [];
-
   // State field(s) for CountController widget.
   int? countControllerValue;
 
@@ -60,39 +52,5 @@ class ProductDetailsModel extends FlutterFlowModel<ProductDetailsWidget> {
   void dispose() {
     topNavModel.dispose();
     gradientButtonModel.dispose();
-    listViewStreamSubscriptions.forEach((s) => s?.cancel());
-    listViewPagingController?.dispose();
-  }
-
-  /// Additional helper methods.
-  PagingController<DocumentSnapshot?, ReviewsRecord> setListViewController(
-    Query query, {
-    DocumentReference<Object?>? parent,
-  }) {
-    listViewPagingController ??= _createListViewController(query, parent);
-    if (listViewPagingQuery != query) {
-      listViewPagingQuery = query;
-      listViewPagingController?.refresh();
-    }
-    return listViewPagingController!;
-  }
-
-  PagingController<DocumentSnapshot?, ReviewsRecord> _createListViewController(
-    Query query,
-    DocumentReference<Object?>? parent,
-  ) {
-    final controller =
-        PagingController<DocumentSnapshot?, ReviewsRecord>(firstPageKey: null);
-    return controller
-      ..addPageRequestListener(
-        (nextPageMarker) => queryReviewsRecordPage(
-          queryBuilder: (_) => listViewPagingQuery ??= query,
-          nextPageMarker: nextPageMarker,
-          streamSubscriptions: listViewStreamSubscriptions,
-          controller: controller,
-          pageSize: 5,
-          isStream: true,
-        ),
-      );
   }
 }

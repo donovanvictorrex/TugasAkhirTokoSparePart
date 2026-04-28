@@ -158,7 +158,7 @@ class _OrderSummaryNewWidgetState extends State<OrderSummaryNewWidget>
                   ),
                   Builder(
                     builder: (context) {
-                      final cartNew = FFAppState().cartItems.toList();
+                      final cartNew = FFAppState().mycart.toList();
 
                       return ListView.builder(
                         padding: EdgeInsets.zero,

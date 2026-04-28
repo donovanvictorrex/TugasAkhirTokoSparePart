@@ -12,6 +12,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 import 'product_details_model.dart';
 export 'product_details_model.dart';
 
@@ -249,6 +250,8 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -1471,340 +1474,289 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                                                       12.0,
                                                                       0.0,
                                                                       0.0),
-                                                          child: PagedListView<
-                                                              DocumentSnapshot<
-                                                                  Object?>?,
-                                                              ReviewsRecord>(
-                                                            pagingController: _model
-                                                                .setListViewController(
-                                                              ReviewsRecord
-                                                                  .collection
-                                                                  .where(
-                                                                    'productRef',
-                                                                    isEqualTo: widget
-                                                                        .productRef
-                                                                        ?.reference,
-                                                                  )
-                                                                  .orderBy(
-                                                                      'dateCreated',
-                                                                      descending:
-                                                                          true),
+                                                          child: StreamBuilder<
+                                                              List<
+                                                                  ReviewsRecord>>(
+                                                            stream:
+                                                                queryReviewsRecord(
+                                                              queryBuilder: (reviewsRecord) =>
+                                                                  reviewsRecord
+                                                                      .where(
+                                                                        'productRef',
+                                                                        isEqualTo: widget
+                                                                            .productRef
+                                                                            ?.reference,
+                                                                      )
+                                                                      .orderBy(
+                                                                          'dateCreated',
+                                                                          descending:
+                                                                              true),
                                                             ),
-                                                            padding:
-                                                                EdgeInsets.zero,
-                                                            shrinkWrap: true,
-                                                            reverse: false,
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            builderDelegate:
-                                                                PagedChildBuilderDelegate<
-                                                                    ReviewsRecord>(
-                                                              // Customize what your widget looks like when it's loading the first page.
-                                                              firstPageProgressIndicatorBuilder:
-                                                                  (_) => Center(
-                                                                child: SizedBox(
-                                                                  width: 50.0,
-                                                                  height: 50.0,
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              // Customize what your widget looks like when it's loading.
+                                                              if (!snapshot
+                                                                  .hasData) {
+                                                                return Center(
                                                                   child:
-                                                                      CircularProgressIndicator(
-                                                                    valueColor:
-                                                                        AlwaysStoppedAnimation<
-                                                                            Color>(
-                                                                      FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              // Customize what your widget looks like when it's loading another page.
-                                                              newPageProgressIndicatorBuilder:
-                                                                  (_) => Center(
-                                                                child: SizedBox(
-                                                                  width: 50.0,
-                                                                  height: 50.0,
-                                                                  child:
-                                                                      CircularProgressIndicator(
-                                                                    valueColor:
-                                                                        AlwaysStoppedAnimation<
-                                                                            Color>(
-                                                                      FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              noItemsFoundIndicatorBuilder:
-                                                                  (_) => Center(
-                                                                child:
-                                                                    Container(
-                                                                  width: 300.0,
-                                                                  height: 200.0,
-                                                                  child:
-                                                                      EmtpyStateWidget(
-                                                                    title:
-                                                                        'No Reviews',
-                                                                    bodyText:
-                                                                        'No reviews exist for this product.',
-                                                                    icon: Icon(
-                                                                      Icons
-                                                                          .star_rounded,
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      size:
-                                                                          90.0,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              itemBuilder: (context,
-                                                                  _,
-                                                                  listViewIndex) {
-                                                                final listViewReviewsRecord = _model
-                                                                        .listViewPagingController!
-                                                                        .itemList![
-                                                                    listViewIndex];
-                                                                return Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          12.0),
-                                                                  child:
-                                                                      Container(
-                                                                    width: double
-                                                                        .infinity,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryBackground,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              8.0),
-                                                                      border:
-                                                                          Border
-                                                                              .all(
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .alternate,
-                                                                        width:
-                                                                            2.0,
-                                                                      ),
-                                                                    ),
+                                                                      SizedBox(
+                                                                    width: 50.0,
+                                                                    height:
+                                                                        50.0,
                                                                     child:
-                                                                        Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          4.0,
-                                                                          4.0,
-                                                                          4.0,
-                                                                          12.0),
-                                                                      child:
-                                                                          Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                12.0,
-                                                                                8.0,
-                                                                                12.0,
-                                                                                8.0),
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                                              children: [
-                                                                                FutureBuilder<UsersRecord>(
-                                                                                  future: UsersRecord.getDocumentOnce(listViewReviewsRecord.userRefReviewer!),
-                                                                                  builder: (context, snapshot) {
-                                                                                    // Customize what your widget looks like when it's loading.
-                                                                                    if (!snapshot.hasData) {
-                                                                                      return Center(
-                                                                                        child: SizedBox(
-                                                                                          width: 50.0,
-                                                                                          height: 50.0,
-                                                                                          child: CircularProgressIndicator(
-                                                                                            valueColor: AlwaysStoppedAnimation<Color>(
-                                                                                              FlutterFlowTheme.of(context).primary,
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      );
-                                                                                    }
-
-                                                                                    final rowUsersRecord = snapshot.data!;
-
-                                                                                    return Row(
-                                                                                      mainAxisSize: MainAxisSize.max,
-                                                                                      children: [
-                                                                                        Padding(
-                                                                                          padding: EdgeInsets.all(2.0),
-                                                                                          child: Container(
-                                                                                            width: 44.0,
-                                                                                            height: 44.0,
-                                                                                            decoration: BoxDecoration(
-                                                                                              color: FlutterFlowTheme.of(context).accent1,
-                                                                                              borderRadius: BorderRadius.circular(10.0),
-                                                                                              shape: BoxShape.rectangle,
-                                                                                              border: Border.all(
-                                                                                                color: FlutterFlowTheme.of(context).primary,
-                                                                                                width: 2.0,
-                                                                                              ),
-                                                                                            ),
-                                                                                            child: Padding(
-                                                                                              padding: EdgeInsets.all(2.0),
-                                                                                              child: ClipRRect(
-                                                                                                borderRadius: BorderRadius.circular(8.0),
-                                                                                                child: Image.network(
-                                                                                                  valueOrDefault<String>(
-                                                                                                    rowUsersRecord.photoUrl,
-                                                                                                    'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/f-f-enterprise-e-comm-2v20bm/assets/97jg5r238nfr/appIcon@2x.png',
-                                                                                                  ),
-                                                                                                  width: 70.0,
-                                                                                                  height: 70.0,
-                                                                                                  fit: BoxFit.cover,
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                        Padding(
-                                                                                          padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
-                                                                                          child: Column(
-                                                                                            mainAxisSize: MainAxisSize.max,
-                                                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                            children: [
-                                                                                              Text(
-                                                                                                valueOrDefault<String>(
-                                                                                                  rowUsersRecord.displayName,
-                                                                                                  'Ghost User',
-                                                                                                ),
-                                                                                                style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                                                                                      fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                                                                                      letterSpacing: 0.0,
-                                                                                                      useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                                                                                    ),
-                                                                                              ),
-                                                                                              Padding(
-                                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
-                                                                                                child: Text(
-                                                                                                  valueOrDefault<String>(
-                                                                                                    rowUsersRecord.email,
-                                                                                                    'casper@ghost.com',
-                                                                                                  ),
-                                                                                                  style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                                        fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
-                                                                                                        letterSpacing: 0.0,
-                                                                                                        useGoogleFonts: !FlutterFlowTheme.of(context).labelMediumIsCustom,
-                                                                                                      ),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    );
-                                                                                  },
-                                                                                ),
-                                                                                Column(
-                                                                                  mainAxisSize: MainAxisSize.max,
-                                                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      'Overall',
-                                                                                      style: FlutterFlowTheme.of(context).labelSmall.override(
-                                                                                            fontFamily: FlutterFlowTheme.of(context).labelSmallFamily,
-                                                                                            letterSpacing: 0.0,
-                                                                                            useGoogleFonts: !FlutterFlowTheme.of(context).labelSmallIsCustom,
-                                                                                          ),
-                                                                                    ),
-                                                                                    Row(
-                                                                                      mainAxisSize: MainAxisSize.max,
-                                                                                      children: [
-                                                                                        Padding(
-                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 4.0, 0.0),
-                                                                                          child: Text(
-                                                                                            valueOrDefault<String>(
-                                                                                              formatNumber(
-                                                                                                listViewReviewsRecord.rating,
-                                                                                                formatType: FormatType.decimal,
-                                                                                                decimalType: DecimalType.automatic,
-                                                                                              ),
-                                                                                              '0',
-                                                                                            ),
-                                                                                            style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                                                                                  fontFamily: FlutterFlowTheme.of(context).headlineMediumFamily,
-                                                                                                  letterSpacing: 0.0,
-                                                                                                  useGoogleFonts: !FlutterFlowTheme.of(context).headlineMediumIsCustom,
-                                                                                                ),
-                                                                                          ),
-                                                                                        ),
-                                                                                        Icon(
-                                                                                          Icons.star_rounded,
-                                                                                          color: Color(0xFF4B39EF),
-                                                                                          size: 20.0,
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                12.0,
-                                                                                0.0,
-                                                                                0.0,
-                                                                                0.0),
-                                                                            child:
-                                                                                AutoSizeText(
-                                                                              valueOrDefault<String>(
-                                                                                listViewReviewsRecord.reviewName,
-                                                                                '--',
-                                                                              ),
-                                                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                    fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
-                                                                                    letterSpacing: 0.0,
-                                                                                    useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                12.0,
-                                                                                4.0,
-                                                                                0.0,
-                                                                                0.0),
-                                                                            child:
-                                                                                AutoSizeText(
-                                                                              valueOrDefault<String>(
-                                                                                listViewReviewsRecord.reviewDescription,
-                                                                                '--',
-                                                                              ),
-                                                                              style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                    fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
-                                                                                    letterSpacing: 0.0,
-                                                                                    useGoogleFonts: !FlutterFlowTheme.of(context).labelMediumIsCustom,
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
+                                                                        CircularProgressIndicator(
+                                                                      valueColor:
+                                                                          AlwaysStoppedAnimation<
+                                                                              Color>(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .primary,
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 );
-                                                              },
-                                                            ),
-                                                          ).animateOnPageLoad(
-                                                              animationsMap[
-                                                                  'listViewOnPageLoadAnimation']!),
+                                                              }
+                                                              List<ReviewsRecord>
+                                                                  listViewReviewsRecordList =
+                                                                  snapshot
+                                                                      .data!;
+                                                              if (listViewReviewsRecordList
+                                                                  .isEmpty) {
+                                                                return Center(
+                                                                  child:
+                                                                      Container(
+                                                                    width:
+                                                                        300.0,
+                                                                    height:
+                                                                        200.0,
+                                                                    child:
+                                                                        EmtpyStateWidget(
+                                                                      title:
+                                                                          'No Reviews',
+                                                                      bodyText:
+                                                                          'No reviews exist for this product.',
+                                                                      icon:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .star_rounded,
+                                                                        color: FlutterFlowTheme.of(context)
+                                                                            .primary,
+                                                                        size:
+                                                                            90.0,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
+
+                                                              return ListView
+                                                                  .builder(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                shrinkWrap:
+                                                                    true,
+                                                                scrollDirection:
+                                                                    Axis.vertical,
+                                                                itemCount:
+                                                                    listViewReviewsRecordList
+                                                                        .length,
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        listViewIndex) {
+                                                                  final listViewReviewsRecord =
+                                                                      listViewReviewsRecordList[
+                                                                          listViewIndex];
+                                                                  return Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            0.0,
+                                                                            0.0,
+                                                                            12.0),
+                                                                    child:
+                                                                        Container(
+                                                                      width: double
+                                                                          .infinity,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: FlutterFlowTheme.of(context)
+                                                                            .secondaryBackground,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(8.0),
+                                                                        border:
+                                                                            Border.all(
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).alternate,
+                                                                          width:
+                                                                              2.0,
+                                                                        ),
+                                                                      ),
+                                                                      child:
+                                                                          Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            4.0,
+                                                                            4.0,
+                                                                            4.0,
+                                                                            12.0),
+                                                                        child:
+                                                                            Column(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.max,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(12.0, 8.0, 12.0, 8.0),
+                                                                              child: Row(
+                                                                                mainAxisSize: MainAxisSize.max,
+                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                children: [
+                                                                                  Row(
+                                                                                    mainAxisSize: MainAxisSize.max,
+                                                                                    children: [
+                                                                                      Padding(
+                                                                                        padding: EdgeInsets.all(2.0),
+                                                                                        child: Container(
+                                                                                          width: 44.0,
+                                                                                          height: 44.0,
+                                                                                          decoration: BoxDecoration(
+                                                                                            color: FlutterFlowTheme.of(context).accent1,
+                                                                                            borderRadius: BorderRadius.circular(10.0),
+                                                                                            shape: BoxShape.rectangle,
+                                                                                            border: Border.all(
+                                                                                              color: FlutterFlowTheme.of(context).primary,
+                                                                                              width: 2.0,
+                                                                                            ),
+                                                                                          ),
+                                                                                          child: Padding(
+                                                                                            padding: EdgeInsets.all(2.0),
+                                                                                            child: ClipRRect(
+                                                                                              borderRadius: BorderRadius.circular(8.0),
+                                                                                              child: Image.network(
+                                                                                                'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60',
+                                                                                                width: 70.0,
+                                                                                                height: 70.0,
+                                                                                                fit: BoxFit.cover,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                                                                                        child: Column(
+                                                                                          mainAxisSize: MainAxisSize.max,
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                          children: [
+                                                                                            Text(
+                                                                                              listViewReviewsRecord.reviewName,
+                                                                                              style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                                                                                    fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                                                                                    letterSpacing: 0.0,
+                                                                                                    useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                                                                                  ),
+                                                                                            ),
+                                                                                            Padding(
+                                                                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                              child: Text(
+                                                                                                listViewReviewsRecord.reviewDescription,
+                                                                                                style: FlutterFlowTheme.of(context).labelMedium.override(
+                                                                                                      fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
+                                                                                                      letterSpacing: 0.0,
+                                                                                                      useGoogleFonts: !FlutterFlowTheme.of(context).labelMediumIsCustom,
+                                                                                                    ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  Column(
+                                                                                    mainAxisSize: MainAxisSize.max,
+                                                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        'Overall',
+                                                                                        style: FlutterFlowTheme.of(context).labelSmall.override(
+                                                                                              fontFamily: FlutterFlowTheme.of(context).labelSmallFamily,
+                                                                                              letterSpacing: 0.0,
+                                                                                              useGoogleFonts: !FlutterFlowTheme.of(context).labelSmallIsCustom,
+                                                                                            ),
+                                                                                      ),
+                                                                                      Row(
+                                                                                        mainAxisSize: MainAxisSize.max,
+                                                                                        children: [
+                                                                                          Padding(
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 4.0, 0.0),
+                                                                                            child: Text(
+                                                                                              valueOrDefault<String>(
+                                                                                                formatNumber(
+                                                                                                  listViewReviewsRecord.rating,
+                                                                                                  formatType: FormatType.decimal,
+                                                                                                  decimalType: DecimalType.automatic,
+                                                                                                ),
+                                                                                                '0',
+                                                                                              ),
+                                                                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                                                                                    fontFamily: FlutterFlowTheme.of(context).headlineMediumFamily,
+                                                                                                    letterSpacing: 0.0,
+                                                                                                    useGoogleFonts: !FlutterFlowTheme.of(context).headlineMediumIsCustom,
+                                                                                                  ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          Icon(
+                                                                                            Icons.star_rounded,
+                                                                                            color: Color(0xFF4B39EF),
+                                                                                            size: 20.0,
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                                                                              child: AutoSizeText(
+                                                                                valueOrDefault<String>(
+                                                                                  listViewReviewsRecord.reviewName,
+                                                                                  '--',
+                                                                                ),
+                                                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                      fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                                                                      letterSpacing: 0.0,
+                                                                                      useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(12.0, 4.0, 0.0, 0.0),
+                                                                              child: AutoSizeText(
+                                                                                valueOrDefault<String>(
+                                                                                  listViewReviewsRecord.reviewDescription,
+                                                                                  '--',
+                                                                                ),
+                                                                                style: FlutterFlowTheme.of(context).labelMedium.override(
+                                                                                      fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
+                                                                                      letterSpacing: 0.0,
+                                                                                      useGoogleFonts: !FlutterFlowTheme.of(context).labelMediumIsCustom,
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ).animateOnPageLoad(
+                                                                  animationsMap[
+                                                                      'listViewOnPageLoadAnimation']!);
+                                                            },
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
@@ -1956,10 +1908,59 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                                                     .toDouble() *
                                                                 (_model
                                                                     .countControllerValue!));
-                                                        FFAppState()
-                                                            .addToCartItems(
-                                                                CartItemStruct());
                                                         safeSetState(() {});
+                                                        if (functions
+                                                                .getCartItemIndex(
+                                                                    FFAppState()
+                                                                        .mycart
+                                                                        .toList(),
+                                                                    widget
+                                                                        .productRef
+                                                                        ?.reference)
+                                                                .toString() ==
+                                                            '-1') {
+                                                          FFAppState()
+                                                              .addToMycart(
+                                                                  CartItemStruct(
+                                                            itemRef: widget
+                                                                .productRef
+                                                                ?.reference,
+                                                            quanity: _model
+                                                                .countControllerValue,
+                                                            totalPrice: widget
+                                                                .productRef
+                                                                ?.price
+                                                                .toDouble(),
+                                                          ));
+                                                          safeSetState(() {});
+                                                        } else {
+                                                          FFAppState()
+                                                              .updateMycartAtIndex(
+                                                            functions.getCartItemIndex(
+                                                                FFAppState()
+                                                                    .mycart
+                                                                    .toList(),
+                                                                widget
+                                                                    .productRef
+                                                                    ?.reference)!,
+                                                            (e) => e
+                                                              ..quanity = functions.tambahJumlahBarang(
+                                                                  FFAppState()
+                                                                      .mycart
+                                                                      .elementAtOrNull(functions.getCartItemIndex(
+                                                                          FFAppState()
+                                                                              .mycart
+                                                                              .toList(),
+                                                                          widget
+                                                                              .productRef
+                                                                              ?.reference)!)
+                                                                      ?.quanity,
+                                                                  _model
+                                                                      .countControllerValue),
+                                                          );
+                                                          safeSetState(() {});
+                                                        }
+
                                                         ScaffoldMessenger.of(
                                                                 context)
                                                             .showSnackBar(

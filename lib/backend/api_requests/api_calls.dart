@@ -89,8 +89,10 @@ class MidtransTransactionCall {
     final ffApiRequestBody = '''
 {
   "transaction_details": {
-    "order_id": "[order_id]",
-    "gross_amount": 1000
+    "order_id": "${escapeStringForJson(orderId)}",
+    "gross_amount": 
+      ${amount}
+    
   },
   "credit_card": {
     "secure": true

@@ -469,10 +469,10 @@ class _VTotalBayarWidgetState extends State<VTotalBayarWidget> {
                                           .cartPriceSummary
                                           .toList())!) *
                                       0.03) +
-                                  (widget.parameter4!),
+                                  FFAppState().biayaOngkir,
                               formatType: FormatType.decimal,
                               decimalType: DecimalType.automatic,
-                              currency: '\$',
+                              currency: 'Rp',
                             ),
                             '0.00',
                           ),
@@ -497,12 +497,28 @@ class _VTotalBayarWidgetState extends State<VTotalBayarWidget> {
               if ((currentUserReference != null) &&
                   (widget.parameter3 != null)) {
                 // createOrder
-                _model.midtransResponse = await MidtransTransactionCall.call();
+                _model.midtransResponse = await MidtransTransactionCall.call(
+                  orderId:
+                      'INV-${getCurrentTimestamp.millisecondsSinceEpoch.toString()}',
+                  amount: valueOrDefault<int>(
+                    (((functions.priceSummary(
+                                FFAppState().cartPriceSummary.toList())!)) +
+                            ((functions.priceSummary(
+                                    FFAppState().cartPriceSummary.toList())!) *
+                                0.085) +
+                            ((functions.priceSummary(
+                                    FFAppState().cartPriceSummary.toList())!) *
+                                0.03) +
+                            FFAppState().biayaOngkir)
+                        .round(),
+                    0,
+                  ),
+                );
 
                 if ((_model.midtransResponse?.succeeded ?? true)) {
                   await launchURL(getJsonField(
                     (_model.midtransResponse?.jsonBody ?? ''),
-                    r'''$.redirect_ur''',
+                    r'''$.redirect_url''',
                   ).toString());
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -589,7 +605,7 @@ class _VTotalBayarWidgetState extends State<VTotalBayarWidget> {
                   ...mapToFirestore(
                     {
                       'itemsOrdered': FFAppState()
-                          .cartItems
+                          .mycart
                           .map((e) => e.itemRef)
                           .withoutNulls
                           .toList(),
@@ -621,6 +637,7 @@ class _VTotalBayarWidgetState extends State<VTotalBayarWidget> {
                         0.00,
                       ),
                       createdAt: getCurrentTimestamp,
+                      vendorName: '',
                     ));
                 FFAppState().cart = [];
                 FFAppState().cartPriceSummary = [];

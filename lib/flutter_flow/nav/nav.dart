@@ -237,6 +237,41 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: TestpageWidget.routeName,
           path: TestpageWidget.routePath,
           builder: (context, params) => TestpageWidget(),
+        ),
+        FFRoute(
+          name: TransactionWidget.routeName,
+          path: TransactionWidget.routePath,
+          builder: (context, params) => TransactionWidget(),
+        ),
+        FFRoute(
+          name: LCadminWidget.routeName,
+          path: LCadminWidget.routePath,
+          builder: (context, params) => LCadminWidget(),
+        ),
+        FFRoute(
+          name: ChatUserWidget.routeName,
+          path: ChatUserWidget.routePath,
+          builder: (context, params) => ChatUserWidget(
+            chatref: params.getParam(
+              'chatref',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['chats'],
+            ),
+          ),
+        ),
+        FFRoute(
+          name: LCadminChatWidget.routeName,
+          path: LCadminChatWidget.routePath,
+          asyncParams: {
+            'chatdata': getDoc(['chats'], ChatsRecord.fromSnapshot),
+          },
+          builder: (context, params) => LCadminChatWidget(
+            chatdata: params.getParam(
+              'chatdata',
+              ParamType.Document,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

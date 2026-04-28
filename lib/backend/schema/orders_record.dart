@@ -76,6 +76,16 @@ class OrdersRecord extends FirestoreRecord {
       _shippingSelected ?? ShippingOptionsStruct();
   bool hasShippingSelected() => _shippingSelected != null;
 
+  // "jeniskirim" field.
+  String? _jeniskirim;
+  String get jeniskirim => _jeniskirim ?? '';
+  bool hasJeniskirim() => _jeniskirim != null;
+
+  // "hargakirim" field.
+  int? _hargakirim;
+  int get hargakirim => _hargakirim ?? 0;
+  bool hasHargakirim() => _hargakirim != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _amount = castToType<double>(snapshotData['amount']);
@@ -94,6 +104,8 @@ class OrdersRecord extends FirestoreRecord {
             is ShippingOptionsStruct
         ? snapshotData['shippingSelected']
         : ShippingOptionsStruct.maybeFromMap(snapshotData['shippingSelected']);
+    _jeniskirim = snapshotData['jeniskirim'] as String?;
+    _hargakirim = castToType<int>(snapshotData['hargakirim']);
   }
 
   static CollectionReference get collection =>
@@ -141,6 +153,8 @@ Map<String, dynamic> createOrdersRecordData({
   AddressStruct? address,
   DateTime? lastEdited,
   ShippingOptionsStruct? shippingSelected,
+  String? jeniskirim,
+  int? hargakirim,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -155,6 +169,8 @@ Map<String, dynamic> createOrdersRecordData({
       'address': AddressStruct().toMap(),
       'lastEdited': lastEdited,
       'shippingSelected': ShippingOptionsStruct().toMap(),
+      'jeniskirim': jeniskirim,
+      'hargakirim': hargakirim,
     }.withoutNulls,
   );
 
@@ -185,7 +201,9 @@ class OrdersRecordDocumentEquality implements Equality<OrdersRecord> {
         e1?.userPurchased == e2?.userPurchased &&
         e1?.address == e2?.address &&
         e1?.lastEdited == e2?.lastEdited &&
-        e1?.shippingSelected == e2?.shippingSelected;
+        e1?.shippingSelected == e2?.shippingSelected &&
+        e1?.jeniskirim == e2?.jeniskirim &&
+        e1?.hargakirim == e2?.hargakirim;
   }
 
   @override
@@ -201,7 +219,9 @@ class OrdersRecordDocumentEquality implements Equality<OrdersRecord> {
         e?.userPurchased,
         e?.address,
         e?.lastEdited,
-        e?.shippingSelected
+        e?.shippingSelected,
+        e?.jeniskirim,
+        e?.hargakirim
       ]);
 
   @override
